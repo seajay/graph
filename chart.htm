@@ -4,100 +4,104 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>Shed humidity</title>
 		
-		
-		<!-- 1. Add these JavaScript inclusions in the head of your page -->
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
 		
-		
-		<!-- 2. Add the JavaScript to initialize the chart on document ready -->
-		<script type="text/javascript">
-		$(document).ready(function() {
-			
+<script type="text/javascript">
 
-			var options = {
-				chart: {
-					renderTo: 'container',
-					type: 'line',
-					zoomType: 'xy'
-				},
-				title: {
-					text: 'My Shed'
-				},
-				xAxis: {
-					enabled: true,
-					type: 'datetime',
-					text: 'Time'
-				},
-				yAxis: [{
-					title: {
-						text: 'Rel Humidity'
-					},
-					labels: {
-						format: '{value}%',
-						style: {
-							color: '#4572A7'
-						}
-					}
-				},
-				{
-					title: {
-						text: 'Temperature'
-					},
-					gridLineWidth: 0,
-					labels: {
-						format: '{value}°C',
-						style: {
-							color: '#89A54E'
-						}
-					},
-					opposite: true
-				}],
-				legend: {
-					layout: 'vertical',
-					align: 'left',
-					x: 60,
-					verticalAlign: 'top',
-					y: 40,
-					floating: true,
-					backgroundColor: '#FFFFFF'
-				},
-				series: []
-			};
-			
-			/*
-			 Load the data from the CSV file.
-			 */ 
-			$.get('uploads/20131210.csv', function(data) {
-				var humidity = {
-					name: 'Humidity',
-					color: '#4572A7',
-					data: []
-				};
-				var temp = {
-					name: 'Temperature',
-					color: '#89A54E',
-					data: []
-				};
+var options;
+var humidity;
+var temp;
+var chart;
+	
+function prep_graph(){
+	options = {
+		chart: {
+			renderTo: 'container',
+			type: 'line',
+			zoomType: 'xy'
+		},
+		title: {
+			text: 'My Shed'
+		},
+		xAxis: {
+			enabled: true,
+			type: 'datetime',
+			text: 'Time'
+		},
+		yAxis: [{
+			title: {
+				text: 'Rel Humidity'
+			},
+			labels: {
+				format: '{value}%',
+				style: {
+					color: '#4572A7'
+				}
+			}
+		},
+		{
+			title: {
+				text: 'Temperature'
+			},
+			gridLineWidth: 0,
+			labels: {
+				format: '{value}°C',
+				style: {
+					color: '#89A54E'
+				}
+			},
+			opposite: true
+		}],
+		legend: {
+			layout: 'vertical',
+			align: 'left',
+			x: 60,
+			verticalAlign: 'top',
+			y: 40,
+			floating: true,
+			backgroundColor: '#FFFFFF'
+		},
+		series: []
+	};
+	chart = new Highcharts.Chart(options);
+}
 
-				// Split the lines
-				var lines = data.split('\n');
-				$.each(lines, function(lineNo, line) {
-					var items = line.split(',');
-					
-					humidity.data.push([parseInt(items[0]), parseFloat(items[1])]);
-					temp.data.push([parseInt(items[0]), parseFloat(items[2])]);
-				});
+function load_data(data){	
 
-				options.series.push(humidity);
-				options.series.push(temp);
-				
-				var chart = new Highcharts.Chart(options);
-			});
+		humidity = {
+			name: 'Humidity',
+			color: '#4572A7',
+			data: []
+		};
+		temp = {
+			name: 'Temperature',
+			color: '#89A54E',
+			data: []
+		};
+
+		// Split the lines
+		var lines = data.split('\n');
+		$.each(lines, function(lineNo, line) {
+			var items = line.split(',');
 			
-			
+			humidity.data.push([parseInt(items[0]), parseFloat(items[1])]);
+			temp.data.push([parseInt(items[0]), parseFloat(items[2])]);
 		});
-		</script>
+
+	chart.addSeries(humidity);
+	chart.addSeries(temp);
+
+}
+
+$(document).ready(function() {
+
+prep_graph();
+$.get('uploads/20131213.csv', load_data);
+
+});
+	
+</script>
 		
 	</head>
 	<body>
