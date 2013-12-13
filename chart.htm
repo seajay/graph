@@ -62,14 +62,27 @@ function prep_graph(){
 			floating: true,
 			backgroundColor: '#FFFFFF'
 		},
-		series: []
+		series: [
+			{
+			name: 'Humidity',
+			yAxis: 0,
+			color: '#4572A7',
+			data: []
+			},
+			{
+			name: 'Temperature',
+			yAxis: 1,
+			color: '#89A54E',
+			data: []
+			}
+		]
 	};
 	chart = new Highcharts.Chart(options);
 }
 
 function load_data(data){	
 
-		humidity = {
+/*		humidity = {
 			name: 'Humidity',
 			yAxis: 0,
 			color: '#4572A7',
@@ -80,19 +93,21 @@ function load_data(data){
 			yAxis: 1,
 			color: '#89A54E',
 			data: []
-		};
+		};*/
 
 		// Split the lines
 		var lines = data.split('\n');
 		$.each(lines, function(lineNo, line) {
 			var items = line.split(',');
+			chart.series[0].addPoint([parseInt(items[0]), parseFloat(items[1])], false);
+//			humidity.data.push([parseInt(items[0]), parseFloat(items[1])]);
+			chart.series[1].addPoint([parseInt(items[0]), parseFloat(items[2])], false);
+//			temp.data.push([parseInt(items[0]), parseFloat(items[2])]);
 			
-			humidity.data.push([parseInt(items[0]), parseFloat(items[1])]);
-			temp.data.push([parseInt(items[0]), parseFloat(items[2])]);
 		});
-
-	chart.addSeries(humidity);
-	chart.addSeries(temp);
+		chart.redraw();
+//	chart.addSeries(humidity);
+//	chart.addSeries(temp);
 
 }
 
