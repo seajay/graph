@@ -81,39 +81,21 @@ function prep_graph(){
 }
 
 function load_data(data){	
-
-/*		humidity = {
-			name: 'Humidity',
-			yAxis: 0,
-			color: '#4572A7',
-			data: []
-		};
-		temp = {
-			name: 'Temperature',
-			yAxis: 1,
-			color: '#89A54E',
-			data: []
-		};*/
-
-		// Split the lines
 		var lines = data.split('\n');
 		$.each(lines, function(lineNo, line) {
 			var items = line.split(',');
 			chart.series[0].addPoint([parseInt(items[0]), parseFloat(items[1])], false);
-//			humidity.data.push([parseInt(items[0]), parseFloat(items[1])]);
 			chart.series[1].addPoint([parseInt(items[0]), parseFloat(items[2])], false);
-//			temp.data.push([parseInt(items[0]), parseFloat(items[2])]);
-			
 		});
 		chart.redraw();
-//	chart.addSeries(humidity);
-//	chart.addSeries(temp);
-
 }
 
 $(document).ready(function() {
 
 prep_graph();
+$.get('uploads/20131210.csv', load_data);
+$.get('uploads/20131211.csv', load_data);
+$.get('uploads/20131212.csv', load_data);
 $.get('uploads/20131213.csv', load_data);
 
 });
