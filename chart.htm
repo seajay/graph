@@ -93,10 +93,11 @@ function load_data(data){
 $(document).ready(function() {
 
 prep_graph();
+
 $.get('uploads/20131210.csv', load_data);
-$.get('uploads/20131211.csv', load_data);
-$.get('uploads/20131212.csv', load_data);
-$.get('uploads/20131213.csv', load_data);
+//$.get('uploads/20131211.csv', load_data);
+//$.get('uploads/20131212.csv', load_data);
+$.get(Highcharts.dateFormat('uploads/%Y%m%d.csv', Date.now()), load_data);
 
 });
 	
@@ -106,7 +107,7 @@ $.get('uploads/20131213.csv', load_data);
 	<body>
 		
 		<!-- 3. Add the container -->
-		<div id="container" style="width: 800px; height: 400px; margin: 0 auto"></div>
+		<div id="container" style="width: 100%; height: 600px; margin: 0 auto"></div>
 		
 				
 	</body>
