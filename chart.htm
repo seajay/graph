@@ -5,9 +5,27 @@
 		<title>Shed humidity</title>
 		
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+		<script src="parseuri.js"></script>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 		<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
-		
+
 <script type="text/javascript">
+
+  $(function() {
+    $( "#date" ).datepicker({
+		dateFormat: "yymmdd",
+		onSelect: function (dateText, inst) {
+		
+		// Delete previous data
+		chart.series[0].setData([], false);
+		chart.series[1].setData([], false);
+		
+		$.get('uploads/'+dateText+'.csv', load_data);
+		
+		}
+	});
+  });
 
 var options;
 var humidity;
@@ -91,13 +109,19 @@ function load_data(data){
 }
 
 $(document).ready(function() {
+	prep_graph();
 
-prep_graph();
-
-$.get('uploads/20131210.csv', load_data);
-//$.get('uploads/20131211.csv', load_data);
-//$.get('uploads/20131212.csv', load_data);
-$.get(Highcharts.dateFormat('uploads/%Y%m%d.csv', Date.now()), load_data);
+	var fileGet = parseUri(window.location.search).queryKey['file'];
+	if (fileGet == undefined)
+	{
+		// Get today's file
+		$.get(Highcharts.dateFormat('uploads/%Y%m%d.csv', Date.now()), load_data);
+	}
+	else
+	{
+		// Get what we were asked to
+		$.get(fileGet, load_data);
+	}
 
 });
 	
@@ -106,9 +130,11 @@ $.get(Highcharts.dateFormat('uploads/%Y%m%d.csv', Date.now()), load_data);
 	</head>
 	<body>
 		
-		<!-- 3. Add the container -->
+		<!-- Div for the graph -->
 		<div id="container" style="width: 100%; height: 600px; margin: 0 auto"></div>
-		
+
+		<!--  div for the datepicker -->
+		<div id="date" style="text-align:center"></div>
 				
 	</body>
 </html>
