@@ -51,6 +51,7 @@ function prep_graph(){
 			title: {
 				text: 'Rel Humidity'
 			},
+			minRange: 10,
 			labels: {
 				format: '{value}%',
 				style: {
@@ -63,6 +64,7 @@ function prep_graph(){
 				text: 'Temperature'
 			},
 			gridLineWidth: 0,
+			minRange: 10,
 			labels: {
 				format: '{value}°C',
 				style: {
@@ -85,6 +87,7 @@ function prep_graph(){
 			name: 'Humidity',
 			yAxis: 0,
 			color: '#4572A7',
+			
 			data: []
 			},
 			{
@@ -94,6 +97,12 @@ function prep_graph(){
 			data: []
 			}
 		]
+		,
+        plotOptions: {
+            series: {
+                lineWidth: 5
+            }
+        }
 	};
 	chart = new Highcharts.Chart(options);
 }
